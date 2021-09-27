@@ -45,6 +45,28 @@ def postfix_eval(postfix_expr: str) -> float:
     """
     # TODO: Implement this function
     ...
+    stack = Stack()
+    alist = postfix_expr.split(" ")
+    num_list = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
+    for a in alist:
+        if a not in "+-*/":
+            try:
+                stack.push(int(a))
+            except:
+                if a not in num_list:
+                    raise TokenError (f'Unknown token: {a}')
+        else:
+            operand2 = stack.pop()
+            if stack.is_empty():
+                raise StackError ('Stack is empty')
+            operand1 = stack.pop()
+            result = do_math(a, operand1, operand2)
+            stack.push(result)
+        
+    result = stack.pop()
+    if not stack.is_empty():
+        raise StackError ("Stack is not empty")
+    return result
 
 
 def do_math(operation: str, operand1: int, operand2: int) -> float:
@@ -70,6 +92,20 @@ def do_math(operation: str, operand1: int, operand2: int) -> float:
     """
     # TODO: Implement this function
     ...
+    if operation == "*":
+        return operand1 * operand2
+    elif operation == "/":
+        return operand1 / operand2
+    elif operation == "+":
+        return operand1 + operand2
+    elif operation == "-":
+        return operand1 - operand2
+    elif operation = "//":
+        return operand1 // operand2
+    elif operation = "**":
+        return operand1 ** operand2
+    else: 
+        raise TokenError (f'Unknown token: {token}')
 
 
 def rpn_calc(filename: str) -> float:
@@ -80,6 +116,9 @@ def rpn_calc(filename: str) -> float:
     """
     # TODO: Implement this function
     ...
+    with open(filename) as f:
+        case = str(f.readline().strip())
+    return postfix_eval(case)
 
 
 def main():
